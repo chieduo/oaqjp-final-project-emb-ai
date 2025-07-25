@@ -11,7 +11,16 @@ def emotion_detector(text_to_analyse):
     # making the api request
     response = requests.post(url, json=payload, headers=headers)
     # if response is not a successful one, throw exception
-    if response.status_code != 200:
+    if response.status_code == 400:
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None,
+        }
+    elif response.status_code != 200:
         print("API Error:", response.status_code, response.text)
         raise Exception("Emotion prediction failed")
 
