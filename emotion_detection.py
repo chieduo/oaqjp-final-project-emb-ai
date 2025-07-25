@@ -14,5 +14,22 @@ def emotion_detector(text_to_analyse):
     if response.status_code != 200:
         print("API Error:", response.status_code, response.text)
         raise Exception("Emotion prediction failed")
-    # return text after successful reponse
-    return response.text
+
+    result = json.loads(response.text)
+
+    # Check if the correct keys exist in the response
+    if ("emotionPredictions" not in result or
+        not isinstance(result["emotionPredictions"], list) or
+        len(result["emotionPredictions"]) == 0 or
+        "emotion" not in result["emotionPredictions"][0]):
+        raise KeyError("Missing expected 'emotionPredictions[0].emotion' in API response")
+
+    # Expected keys exist so lets return the emotion list
+    emotion = result['emotionPredictions'][0]['emotion']
+    
+    # Get the key with the max value and ensure max compares the values not the keys
+    max_emotion = max(emotion, key=emotion.get)
+    # Assign the key to dominant_emotion 
+    emotion['dominant_emotion'] = max_emotion;
+
+    return emotion
