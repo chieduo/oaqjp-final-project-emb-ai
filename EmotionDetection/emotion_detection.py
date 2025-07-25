@@ -2,7 +2,7 @@ import requests
 import json
 
 def emotion_detector(text_to_analyse):
-    """ analyze text to respond with the user's emotional state """
+    """ Analyze text to respond with the user's emotional state """
     url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
     # Text to analyze
     payload = { "raw_document": { "text": text_to_analyse } }
@@ -15,6 +15,7 @@ def emotion_detector(text_to_analyse):
         print("API Error:", response.status_code, response.text)
         raise Exception("Emotion prediction failed")
 
+    # Json.loads will catch any except with invalid json
     result = json.loads(response.text)
 
     # Check if the correct keys exist in the response
